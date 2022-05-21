@@ -70,7 +70,7 @@ public class Move
 
     public override string ToString()
     {
-        return "Trying to move: " + _cardsToMove + " form " + _provider + " to " + _receiver;
+        return "Move: " + _cardsToMove + " form " + _provider + " to " + _receiver;
     }
 }
 

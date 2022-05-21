@@ -29,8 +29,14 @@ namespace Solitair_gui
         {
             _player = new GuiPlayer();
             _player.CurrentField += PlayerOnCurrentField;
+            _player.NewStatus += PlayerOnNewStatus;
             InitializeComponent();
             FillGui(_player.PlayingField);
+        }
+
+        private void PlayerOnNewStatus(object? sender, string e)
+        {
+            lblStatus.Content = "Status: " + e;
         }
 
         private void PlayerOnCurrentField(object? sender, PlayingField e)

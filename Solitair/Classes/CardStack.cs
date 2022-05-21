@@ -73,7 +73,8 @@ public class CardStack : IStack
 
     public List<Card> PickUpCards(int pos)
     {
-        List<Card> pickedCards = Cards.GetRange(pos, Cards.Count - pos);
+        
+        List<Card> pickedCards = Cards.GetRange(pos-1, Cards.Count - (pos-1));
         return pickedCards;
     }
 

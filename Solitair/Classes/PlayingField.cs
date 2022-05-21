@@ -1,4 +1,5 @@
-﻿using Solitair.Domains;
+﻿using System.Runtime.CompilerServices;
+using Solitair.Domains;
 using Solitair.Domains.Enums;
 using Solitair.Helper;
 
@@ -124,7 +125,20 @@ public class PlayingField
         #endregion
 
         #region  SCORE: 5 try move form pile to build stack or suit stack
-        Card topPile = _pile.GetCard();
+
+        //This should only apply for the first search 
+        Card topPile;
+        if (_pile.GetCard() != null)
+        {
+            topPile = _pile.GetCard()!;
+        }
+        else
+        {
+            _pile.MoveCardToTalon(); 
+            topPile = _pile.MoveTop();
+        }
+        
+        
 
         foreach (CardStack buildStack in buildStacks)
         {
@@ -170,7 +184,7 @@ public class PlayingField
         for (int i = 0; i < 6; i++ )
         {
             int nums = buildStacks[i].GetMoveableStackSize();
-            for (int j = 1; j < nums; j++)
+            for (int j = 1; j <= nums; j++)
             {
                 for (int k = 0; k < 6; k++)
                 {
@@ -204,6 +218,10 @@ public class PlayingField
         foreach (SuitStack suitStack in suitStacks)
         {
             Card card = suitStack.GetCard();
+            if (card == null)
+            {
+                continue;
+            }
             foreach (CardStack buildStack in buildStacks)
             {
                 Move move = new Move(card, suitStack, buildStack, -15);
