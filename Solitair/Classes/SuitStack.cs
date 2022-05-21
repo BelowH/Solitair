@@ -1,4 +1,5 @@
-﻿using Solitair.Domains.Enums;
+﻿using Solitair.Classes.Enums;
+using Solitair.Domains.Enums;
 using Solitair.Domains.Exceptions;
 
 namespace Solitair.Classes;
@@ -34,7 +35,7 @@ public class SuitStack : IStack
         
         
         Cards.Add(card);
-        if (card.Rank == Rank.King)
+        if (card.Rank == Rank.K)
         {
             IsFull = true;
         }
@@ -43,9 +44,9 @@ public class SuitStack : IStack
     }
 
 
-    public Card GetCard()
+    public Card? GetCard()
     {
-        return Cards.Last();
+        return Cards.Count > 0 ? Cards.Last() : null;
     }
 
     public int GetMoveableStackSize()
@@ -60,12 +61,12 @@ public class SuitStack : IStack
             return false;
         }
 
-        if (Cards.Count == 0 && card.Rank == Rank.Ace)
+        return Cards.Count switch
         {
-            return true;
-        }
-
-        return card.Rank == Cards.Last().Rank + 1;
+            0 when card.Rank == Rank.Ace => true,
+            0 => false,
+            _ => card.Rank == Cards.Last().Rank + 1
+        };
     }
 
     public bool TryMoveStackTo(IList<Card> cards)
@@ -90,7 +91,7 @@ public class SuitStack : IStack
     public void MoveTo(Card card)
     {
         Cards.Add(card);
-        if (card.Rank == Rank.King)
+        if (card.Rank == Rank.K)
         {
             IsFull = true;
         }

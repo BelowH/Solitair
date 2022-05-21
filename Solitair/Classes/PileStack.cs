@@ -4,11 +4,11 @@ namespace Solitair.Classes;
 
 public class PileStack : IStack
 {
-    private List<Card> Pile;
+    public List<Card> Pile;
 
     private List<Card> Talon;
     
-    private event EventHandler PileEmpty;
+  
 
     public PileStack(List<Card> cards)
     {
@@ -34,9 +34,9 @@ public class PileStack : IStack
         Talon.Add(card);
     }
 
-    public Card GetCard()
+    public Card? GetCard()
     {
-        return Talon.Count > 0 ? Talon.First() : null!;
+        return Talon.Count > 0 ? Talon.First() : null;
     }
 
     public int GetMoveableStackSize()

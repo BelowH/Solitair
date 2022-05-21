@@ -1,4 +1,4 @@
-﻿namespace Solitair.Domains.Enums;
+﻿namespace Solitair.Classes.Enums;
 
 public enum Rank
 {
@@ -12,8 +12,8 @@ public enum Rank
     Eight = 8,
     Nine = 9,
     Ten = 10,
-    Jack = 11,
-    Queen = 12,
-    King = 13,
+    J = 11,
+    Q = 12,
+    K = 13,
     
 }

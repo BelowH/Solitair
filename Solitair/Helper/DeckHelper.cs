@@ -1,4 +1,5 @@
 ﻿using Solitair.Classes;
+using Solitair.Classes.Enums;
 using Solitair.Domains;
 using Solitair.Domains.Enums;
 

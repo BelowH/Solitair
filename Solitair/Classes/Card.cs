@@ -1,4 +1,5 @@
-﻿using Solitair.Domains.Enums;
+﻿using Solitair.Classes.Enums;
+using Solitair.Domains.Enums;
 
 namespace Solitair.Classes;
 
@@ -26,6 +27,8 @@ public class Card
 
     public override string ToString()
     {
-        return $"Card:[{Suit},{Rank}]\r\n";
+        string rank = Rank.ToString();
+
+        return Suit + " " + Rank;
     }
 }

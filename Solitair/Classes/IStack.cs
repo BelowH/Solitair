@@ -2,7 +2,7 @@
 
 public interface IStack
 {
-    public Card GetCard();
+    public Card? GetCard();
 
     public int GetMoveableStackSize();
     
