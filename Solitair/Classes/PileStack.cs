@@ -1,45 +1,47 @@
-﻿using Solitair.Domains;
-
-namespace Solitair.Classes;
+﻿namespace Solitair.Classes;
 
 public class PileStack : IStack
 {
     public List<Card> Pile;
 
-    private List<Card> Talon;
+    private Card? _talon;
     
   
 
     public PileStack(List<Card> cards)
     {
+        foreach (Card card in cards.Where(card => !card.IsVisible))
+        {
+            card.IsVisible = true;
+        }
+        
         Pile = cards;
-        Talon = new List<Card>();
+        _talon = null;
     }
 
     public void MoveCardToTalon()
     {
-        if (Pile.Count + Talon.Count  == 0)
+        
+        if (_talon != null)
+        {
+            Pile.Add(_talon);
+        }
+        if (Pile.Count == 0 )
         {
             return;
         }
-        
-        if (Pile.Count < 1)
-        {
-            Pile = Talon;
-            Talon.Clear();
-        }
-        Card card = Pile.First();
-        card.IsVisible = true;
-        Pile.RemoveAt(0);
-        Talon.Add(card);
+        _talon = Pile.First();
+        Pile.Remove(_talon);
+
     }
 
     public Card? GetCard()
     {
-        return Talon.Count > 0 ? Talon.First() : null;
+        
+        return _talon;
     }
 
-    public int GetMoveableStackSize()
+    public int GetVisibleStackSize()
     {
         return 1;
     }
@@ -56,12 +58,16 @@ public class PileStack : IStack
 
     public Card MoveTop()
     {
-        return GetCard();
+        Card card = GetCard()!;
+        _talon = null;
+        return card;
     }
 
     public List<Card> MoveStack(int count)
     {
-        return new List<Card> { GetCard() };
+        List<Card> movedTalon = new List<Card> {GetCard()!};
+        _talon = null;
+        return movedTalon;
     }
 
     public void MoveTo(Card card)
@@ -74,11 +80,8 @@ public class PileStack : IStack
         throw new NotImplementedException();
     }
 
-    public Card RemoveFromTalon()
+    public override string ToString()
     {
-        Card card = GetCard();
-        Talon.Remove(card);
-        return card;
+        return "Pile";
     }
-    
 }

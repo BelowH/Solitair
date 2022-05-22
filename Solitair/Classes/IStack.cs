@@ -4,7 +4,7 @@ public interface IStack
 {
     public Card? GetCard();
 
-    public int GetMoveableStackSize();
+    public int GetVisibleStackSize();
     
     public bool TryMoveTo(Card card);
 
@@ -17,6 +17,8 @@ public interface IStack
     public void MoveTo(Card card);
 
     public void MoveStackTo(IList<Card> cards);
+
+    public string ToString();
 
 
 }

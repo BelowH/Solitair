@@ -13,32 +13,23 @@ public class CardHelper
     private const string BackCard = "🂠";
     public const string EmptyField = " ";
 
-    private static string[] _spades = new[] {"🂡","🂢","🂣","🂤","🂥","🂦","🂧","🂨","🂩","🂪","🂫","🂬","🂭","🂮"};
-    private static string[] _hearts = new[] {"🂱","🂲","🂳","🂴","🂵","🂶","🂷","🂸","🂹","🂺","🂻","🂼","🂽","🂾"};
-    private static string[] _diamonds = new[] {"🃁","🃂","🃃","🃄","🃅","🃆","🃇","🃈","🃉","🃊","🃋","🃌","🃍","🃎"};
-    private static string[] _clubs = new[] {"🃑","🃒","🃓","🃔","🃕","🃖","🃗","🃘","🃙","🃚","🃛","🃜","🃝","🃞"};
+    private static string[] _spades =   new[] {"🂡","🂢","🂣","🂤","🂥","🂦","🂧","🂨","🂩","🂪","🂫","🂭","🂮"};
+    private static string[] _hearts =   new[] {"🂱","🂲","🂳","🂴","🂵","🂶","🂷","🂸","🂹","🂺","🂻","🂽","🂾"};
+    private static string[] _diamonds = new[] {"🃁","🃂","🃃","🃄","🃅","🃆","🃇","🃈","🃉","🃊","🃋","🃍","🃎"};
+    private static string[] _clubs =    new[] {"🃑","🃒","🃓","🃔","🃕","🃖","🃗","🃘","🃙","🃚","🃛","🃝","🃞"};
 
 
     private static string CardToString(Card card)
     {
-        if (card.IsVisible)
+        //if (!card.IsVisible) return BackCard;
+        return card.Suit switch
         {
-            switch (card.Suit)
-            {
-                case Suit.Clubs:
-                    return _clubs[(int) card.Rank - 1];
-                case Suit.Diamonds:
-                    return _diamonds[(int) card.Rank - 1];
-                case Suit.Hearts:
-                    return _hearts[(int) card.Rank - 1];
-                case Suit.Spades:
-                    return _spades[(int) card.Rank - 1];
-                default:
-                    throw new ArgumentOutOfRangeException();
-            }
-        }
-
-        return BackCard;
+            Suit.Clubs => _clubs[(int) card.Rank - 1],
+            Suit.Diamonds => _diamonds[(int) card.Rank - 1],
+            Suit.Hearts => _hearts[(int) card.Rank - 1],
+            Suit.Spades => _spades[(int) card.Rank - 1],
+            _ => throw new ArgumentOutOfRangeException()
+        };
     }
 
     public static Label GetCardLabel(Card card)
@@ -47,18 +38,23 @@ public class CardHelper
         {
             VerticalAlignment = VerticalAlignment.Center,
             HorizontalAlignment = HorizontalAlignment.Center,
-            FontSize = 70
+            FontSize = 30
         };
-        if (card.Suit is Suit.Hearts or Suit.Diamonds)
+        if (!card.IsVisible)
         {
-            if (card.IsVisible)
+            label.Foreground = Brushes.Yellow; 
+        }
+        else
+        {
+            if (card.Suit is Suit.Hearts or Suit.Diamonds)
             {
+            
                 label.Foreground = Brushes.Red; 
             }
-            
         }
+        
 
-        label.Content = CardToString(card); //+ " " + card;
+        label.Content = CardToString(card)+ " " + card;
         return label;
     }
     

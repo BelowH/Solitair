@@ -9,9 +9,10 @@ public class GuiPlayer : IPlayer
 
     public event EventHandler<string>? NewStatus; 
 
-    private int cycleCount;
+    private int _round;
     public GuiPlayer()
     {
+        _round = 1;
         PlayingField = new PlayingField();
     }
     
@@ -23,25 +24,31 @@ public class GuiPlayer : IPlayer
             {
                 List<Move> moves = PlayingField.GetLegalMoves();
                 moves = moves.OrderByDescending(m => m.PossibleScore).ToList();
+                Console.WriteLine($"-----Round {_round}-----");
+                foreach (Move move in moves)
+                {
+                    Console.WriteLine(move);
+                }
                 if (moves.Count == 0 || moves.First().PossibleScore == -15)
                 {
-                    if (PlayingField._pile.Pile.Count <= cycleCount && moves.Count == 0)
+                    /*
+                    if (PlayingField._pile.Pile.Count <= _cycleCount && moves.Count == 0)
                     {
                         OnNewStatus("Game end! Status: Stuck.");
                         return;
                     }
+                    */
 
-                    if(PlayingField._pile.Pile.Count <= cycleCount)
+                    if(moves.Count > 0)
                     {
                         moves.First().ExecuteMove();
                         OnNewStatus(moves[0].ToString());
                         OnRoundPlayed();
                         return;
                     }
-
                     OnNewStatus("Cycling Pile.");
                     PlayingField.CyclePile();
-                    cycleCount++;
+                   
                 }
                 else
                 {
@@ -52,6 +59,8 @@ public class GuiPlayer : IPlayer
                 }
                 
             }
+
+            _round++;
             OnRoundPlayed();
         }
         catch (Exception e)

@@ -49,7 +49,7 @@ public class SuitStack : IStack
         return Cards.Count > 0 ? Cards.Last() : null;
     }
 
-    public int GetMoveableStackSize()
+    public int GetVisibleStackSize()
     {
         return 1;
     }
@@ -100,5 +100,10 @@ public class SuitStack : IStack
     public void MoveStackTo(IList<Card> cards)
     {
         throw new IllegalMoveException();
+    }
+
+    public override string ToString()
+    {
+        return Suit + " Stack";
     }
 }

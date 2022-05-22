@@ -21,8 +21,12 @@ public class Card
 
     public bool IsCompatible(Card cardToAdd)
     {
-        if (this.Suit is not (Suit.Diamonds or Suit.Hearts) || cardToAdd.Suit is not (Suit.Clubs or Suit.Spades)) return false;
-        return this.Rank.Equals(cardToAdd.Rank-1);
+        return cardToAdd.Suit switch
+        {
+            Suit.Clubs or Suit.Spades when Suit is Suit.Diamonds or Suit.Hearts => Rank.Equals(cardToAdd.Rank + 1),
+            Suit.Hearts or Suit.Diamonds when Suit is Suit.Clubs or Suit.Spades => Rank.Equals(cardToAdd.Rank + 1),
+            _ => false
+        };
     }
 
     public override string ToString()

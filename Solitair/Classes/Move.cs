@@ -70,7 +70,39 @@ public class Move
 
     public override string ToString()
     {
-        return "Move: " + _cardsToMove + " form " + _provider + " to " + _receiver;
+        string listString = "[";
+        foreach (Card card in _cardsToMove)
+        {
+            listString += card + ",";
+        }
+
+        listString += "]";
+        
+        return "Move: " + listString + " form " + _provider + " to " + _receiver;
     }
+
+#pragma warning disable CS0659
+    public override bool Equals(object? obj)
+
+    {
+
+        // ReSharper disable once BaseObjectEqualsIsObjectEquals
+        if (obj is not Move toCompare) return base.Equals(obj);
+        
+        if (!_provider.ToString().Equals(toCompare._provider.ToString(), StringComparison.InvariantCultureIgnoreCase))
+        {
+            return false;
+        }
+
+        if (!_receiver.ToString().Equals(toCompare._receiver.ToString(),StringComparison.InvariantCultureIgnoreCase))
+        {
+            return false;
+        }
+
+        return _cardsToMove.SequenceEqual(toCompare._cardsToMove);
+        
+        // ReSharper disable once BaseObjectEqualsIsObjectEquals
+    }
+#pragma warning restore CS0659
 }
 
