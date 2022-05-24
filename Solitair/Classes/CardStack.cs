@@ -63,7 +63,7 @@ public class CardStack : IStack
     {
         Card card = Cards.First();
         Cards.Remove(card);
-        if (GetVisibleStackSize() == 0)
+        if (GetVisibleStackSize() == 0 && Cards.Count > 0)
         {
             Cards.First().IsVisible = true;
         }

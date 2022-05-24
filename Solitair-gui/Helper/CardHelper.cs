@@ -42,7 +42,9 @@ public class CardHelper
         };
         if (!card.IsVisible)
         {
-            label.Foreground = Brushes.Yellow; 
+            label.Foreground = Brushes.Black;
+            label.Content = BackCard + " unknown";
+            return label;
         }
         else
         {

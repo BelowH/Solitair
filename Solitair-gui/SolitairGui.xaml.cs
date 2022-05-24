@@ -24,7 +24,7 @@ namespace Solitair_gui
     public partial class SolitairGui : Window
     {
         
-        private readonly GuiPlayer _player;
+        private GuiPlayer _player;
         
         public SolitairGui()
         {
@@ -129,6 +129,13 @@ namespace Solitair_gui
             }
             
         }
-        
+
+        private void Restart(object sender, RoutedEventArgs e)
+        {
+            _player = new GuiPlayer();
+            _player.CurrentField += PlayerOnCurrentField;
+            _player.NewStatus += PlayerOnNewStatus;
+            FillGui(_player.PlayingField);
+        }
     }
 }

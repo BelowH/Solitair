@@ -189,12 +189,12 @@ public class PlayingField
         #endregion
 
         #region SCORE:  3 try move form build stack to build stack (every combination)
-        for (int i = 0; i < 6; i++ )
+        for (int i = 0; i < 7; i++ ) //provider deck counter
         {
             int nums = buildStacks[i].GetVisibleStackSize();
             for (int j = 1; j <= nums; j++)
             {
-                for (int k = 0; k < 6; k++)
+                for (int k = 0; k < 7; k++) // receiver deck counter
                 {
                     if (k == i) continue;
                     List<Card> cards = buildStacks[i].PickUpCards(j);
@@ -222,11 +222,11 @@ public class PlayingField
         {
             return allMoves;
         }
-
+        return allMoves;
         #endregion
 
-        #region SCORE:-15 try move card form suit stack to build stack 
-
+        #region SCORE:-15 try move card form suit stack to build stack
+        /*
         foreach (SuitStack suitStack in suitStacks)
         {
             Card card = suitStack.GetCard()!;
@@ -256,7 +256,7 @@ public class PlayingField
         }
 
         return allMoves;
-
+        */
         #endregion
         
     }

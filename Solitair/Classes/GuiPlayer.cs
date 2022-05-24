@@ -64,7 +64,8 @@ public class GuiPlayer : IPlayer
             OnRoundPlayed();
         }
         catch (Exception e)
-        {
+        {   
+            
             OnNewStatus("Error: " + e);
         }
     }

@@ -106,4 +106,5 @@ public class SuitStack : IStack
     {
         return Suit + " Stack";
     }
+    
 }
