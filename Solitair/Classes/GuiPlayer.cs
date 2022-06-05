@@ -10,6 +10,9 @@ public class GuiPlayer : IPlayer
     public event EventHandler<string>? NewStatus; 
 
     private int _round;
+
+    private int _pileCycles;
+    
     public GuiPlayer()
     {
         _round = 1;
@@ -20,6 +23,11 @@ public class GuiPlayer : IPlayer
     {
         try
         {
+            if (_round >= 1000)
+            {
+                OnNewStatus("Stuck! :O, too many moves");
+                return;
+            }
             if (PlayingField.GetGameState() == GameState.PLAYING)
             {
                 List<Move> moves = PlayingField.GetLegalMoves();
@@ -31,33 +39,38 @@ public class GuiPlayer : IPlayer
                 }
                 if (moves.Count == 0 || moves.First().PossibleScore == -15)
                 {
-                    /*
-                    if (PlayingField._pile.Pile.Count <= _cycleCount && moves.Count == 0)
+                    if(moves.Count > 0 && _pileCycles >= PlayingField._pile.Pile.Count)
                     {
-                        OnNewStatus("Game end! Status: Stuck.");
-                        return;
-                    }
-                    */
-
-                    if(moves.Count > 0)
-                    {
-                        moves.First().ExecuteMove();
-                        OnNewStatus(moves[0].ToString());
+                        _pileCycles = 0;
+                        PlayingField.ExecuteMove(moves.First());
+                        OnNewStatus(moves.First().ToString());
                         OnRoundPlayed();
                         return;
                     }
-                    OnNewStatus("Cycling Pile.");
+
+                    if (_pileCycles >= PlayingField._pile.Pile.Count)
+                    {
+                        OnNewStatus("Stuck! :O");
+                        return;
+                    }
+                    _pileCycles++;
+                    OnNewStatus("Cycling Pile: " + _pileCycles + " out of" + PlayingField._pile.Pile.Count);
                     PlayingField.CyclePile();
-                   
+                    
+
                 }
                 else
                 {
-                    Random rng = new Random();
-                    int index = rng.Next(moves.Count);
-                    OnNewStatus(moves[index].ToString());
-                    PlayingField.ExecuteMove(moves[index]);
+                    _pileCycles = 0;
+                    OnNewStatus( "Round: " + _round + " " + moves.First());
+                    PlayingField.ExecuteMove(moves.First());
                 }
                 
+            }
+            else if (PlayingField.GetGameState() == GameState.FINISHED)
+            {
+                OnNewStatus("Finished! :D");
+                return;
             }
 
             _round++;

@@ -48,7 +48,7 @@ public class PlayingField
         _heartsDeck = new SuitStack(Suit.Hearts);
         _moves = new List<Move>();
         
-        List<Card> deck = DeckHelper.GetFullDeck();
+        List<Card?> deck = DeckHelper.GetFullDeck();
         _buildStack1 = new CardStack("buildStack1",deck.GetRange(0, 1));
         deck.RemoveRange(0,1);
         _buildStack2 = new CardStack("buildStack2",deck.GetRange(0, 2));
@@ -94,7 +94,7 @@ public class PlayingField
         #region SCORE: 10 try move form buildStack or pile to suit stack
         foreach (CardStack buildStack in buildStacks)
         {
-            Card topCard = buildStack.GetCard();
+            Card? topCard = buildStack.GetCard();
             foreach (SuitStack suitStack in suitStacks)
             {
                 Move move = new Move(topCard, buildStack, suitStack, 10);
@@ -127,7 +127,7 @@ public class PlayingField
         #region  SCORE: 5 try move form pile to build stack or suit stack
 
         //This should only apply for the first search 
-        Card topPile;
+        Card? topPile;
         if (_pile.GetCard() != null)
         {
             topPile = _pile.GetCard()!;
@@ -197,7 +197,7 @@ public class PlayingField
                 for (int k = 0; k < 7; k++) // receiver deck counter
                 {
                     if (k == i) continue;
-                    List<Card> cards = buildStacks[i].PickUpCards(j);
+                    List<Card?> cards = buildStacks[i].PickUpCards(j);
                     Move move = new Move(cards, buildStacks[i], buildStacks[k], 3);
                     if (DetectLoop(move))
                     {
@@ -222,18 +222,14 @@ public class PlayingField
         {
             return allMoves;
         }
-        return allMoves;
+        
         #endregion
 
         #region SCORE:-15 try move card form suit stack to build stack
-        /*
+        
         foreach (SuitStack suitStack in suitStacks)
         {
             Card card = suitStack.GetCard()!;
-            if (card == null)
-            {
-                continue;
-            }
             foreach (CardStack buildStack in buildStacks)
             {
                 Move move = new Move(card, suitStack, buildStack, -15);
@@ -253,10 +249,11 @@ public class PlayingField
                     //ignored
                 }
             }
+            
         }
 
         return allMoves;
-        */
+        
         #endregion
         
     }
@@ -274,7 +271,15 @@ public class PlayingField
 
     private bool DetectLoop(Move moveToTry)
     {
-        return Enumerable.Contains(_moves, moveToTry);
+        foreach (Move move in _moves)
+        {
+            if (move.Equals(moveToTry))
+            {
+                return true;
+            }
+        }
+
+        return false;
     }
     
     public GameState GetGameState()

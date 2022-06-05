@@ -1,16 +1,16 @@
-﻿namespace Solitair.Classes;
+﻿using Solitair.Domains.Exceptions;
+
+namespace Solitair.Classes;
 
 public class PileStack : IStack
 {
-    public List<Card> Pile;
+    public readonly List<Card?> Pile;
 
     private Card? _talon;
     
-  
-
-    public PileStack(List<Card> cards)
+    public PileStack(List<Card?> cards)
     {
-        foreach (Card card in cards.Where(card => !card.IsVisible))
+        foreach (Card? card in cards.Where(card => !card.IsVisible))
         {
             card.IsVisible = true;
         }
@@ -34,50 +34,45 @@ public class PileStack : IStack
         Pile.Remove(_talon);
 
     }
-
+    
     public Card? GetCard()
     {
         
         return _talon;
     }
 
-    public int GetVisibleStackSize()
-    {
-        return 1;
-    }
-
-    public bool TryMoveTo(Card card)
+    public bool TryMoveTo(Card? card)
     {
         return false;
     }
 
-    public bool TryMoveStackTo(IList<Card> cards)
+    public bool TryMoveStackTo(IList<Card?> cards)
     {
         return false;
     }
 
-    public Card MoveTop()
+    public Card? MoveTop()
     {
-        Card card = GetCard()!;
+        Card? card = GetCard()!;
         _talon = null;
         return card;
     }
 
-    public List<Card> MoveStack(int count)
+    public List<Card?> MoveStack(int count)
     {
-        List<Card> movedTalon = new List<Card> {GetCard()!};
+        List<Card?> movedTalon = new List<Card?> {GetCard()!};
         _talon = null;
         return movedTalon;
     }
 
-    public void MoveTo(Card card)
+    public void MoveTo(Card? card)
     {
-        throw new NotImplementedException();
+        throw new IllegalMoveException("You can't move a card to the pile.");
     }
 
-    public void MoveStackTo(IList<Card> cards)
+    public void MoveStackTo(IList<Card?> cards)
     {
-        throw new NotImplementedException();
+        throw new IllegalMoveException("You can't move a card's to the pile.");
     }
 
     public override string ToString()

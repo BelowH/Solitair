@@ -2,23 +2,18 @@
 
 public interface IStack
 {
-    public Card? GetCard();
+    public bool TryMoveTo(Card? card);
 
-    public int GetVisibleStackSize();
-    
-    public bool TryMoveTo(Card card);
+    public bool TryMoveStackTo(IList<Card?> cards);
 
-    public bool TryMoveStackTo(IList<Card> cards);
+    public Card? MoveTop();
 
-    public Card MoveTop();
+    public List<Card?> MoveStack(int count);
 
-    public List<Card> MoveStack(int count);
+    public void MoveTo(Card? card);
 
-    public void MoveTo(Card card);
-
-    public void MoveStackTo(IList<Card> cards);
+    public void MoveStackTo(IList<Card?> cards);
 
     public string ToString();
-
 
 }

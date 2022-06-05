@@ -8,34 +8,34 @@ public class SuitStack : IStack
 {
     public Suit Suit;
 
-    public List<Card> Cards;
+    public List<Card?> Cards;
 
     public bool IsFull;
 
     public SuitStack(Suit suit)
     {
-        Cards = new List<Card>();
+        Cards = new List<Card?>();
         Suit = suit;
     }
 
-    public bool AddCard(Card card)
+    public bool AddCard(Card? card)
     {
-        if (card.Suit != Suit)
+        if (card != null && card.Suit != Suit)
         {
             return false;
         }
 
-        if (Cards.Count == 0 && card.Rank == Rank.Ace)
+        if (card != null && Cards.Count == 0 && card.Rank == Rank.Ace)
         {
             Cards.Add(card);
             return true;
         }
 
-        if (card.Rank != Cards.Last().Rank + 1) return false;
+        if (card != null && card.Rank != Cards.Last()!.Rank + 1) return false;
         
         
         Cards.Add(card);
-        if (card.Rank == Rank.K)
+        if (card != null && card.Rank == Rank.K)
         {
             IsFull = true;
         }
@@ -43,6 +43,7 @@ public class SuitStack : IStack
 
     }
 
+    
 
     public Card? GetCard()
     {
@@ -54,50 +55,48 @@ public class SuitStack : IStack
         return 1;
     }
 
-    public bool TryMoveTo(Card card)
+    public bool TryMoveTo(Card? card)
     {
-        if (card.Suit != Suit)
+        if (card != null && card.Suit != Suit)
         {
             return false;
         }
 
-        return Cards.Count switch
+        return card != null && Cards.Count switch
         {
             0 when card.Rank == Rank.Ace => true,
             0 => false,
-            _ => card.Rank == Cards.Last().Rank + 1
+            _ => card.Rank == Cards.Last()!.Rank + 1
         };
     }
 
-    public bool TryMoveStackTo(IList<Card> cards)
+    public bool TryMoveStackTo(IList<Card?> cards)
     {
         return false;
     }
 
-    public Card MoveTop()
+    public Card? MoveTop()
     {
-        Card card = Cards.Last();
-        Cards.Remove(card);
+        Card? card = Cards.Last();
+        Cards.Remove(Cards.Last());
         return card;
     }
 
-    public List<Card> MoveStack(int count)
+    public List<Card?> MoveStack(int count)
     {
-        Card card = Cards.Last();
-        Cards.Remove(card);
-        return new List<Card>(){card};
+        throw new IllegalMoveException("you can only move one card from a the suit stack.");
     }
 
-    public void MoveTo(Card card)
+    public void MoveTo(Card? card)
     {
         Cards.Add(card);
-        if (card.Rank == Rank.K)
+        if (card is {Rank: Rank.K})
         {
             IsFull = true;
         }
     }
 
-    public void MoveStackTo(IList<Card> cards)
+    public void MoveStackTo(IList<Card?> cards)
     {
         throw new IllegalMoveException();
     }

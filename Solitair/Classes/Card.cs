@@ -19,7 +19,7 @@ public class Card
 
 
 
-    public bool IsCompatible(Card cardToAdd)
+    public bool IsCompatible(Card? cardToAdd)
     {
         return cardToAdd.Suit switch
         {
