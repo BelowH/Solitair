@@ -8,16 +8,16 @@ public class Move
 
     public int PossibleScore;
     
-    private List<Card> _cardsToMove;
+    private readonly List<Card?> _cardsToMove;
 
-    private IStack _provider;
+    private readonly IStack _provider;
 
-    private IStack _receiver;
+    private readonly IStack _receiver;
 
     private bool _movePossible;
         
     
-    public Move(List<Card> cardsToMove, IStack provider, IStack receiver, int score)
+    public Move(List<Card?> cardsToMove, IStack provider, IStack receiver, int score)
     {
         _cardsToMove = cardsToMove;
         _provider = provider;
@@ -25,9 +25,9 @@ public class Move
         PossibleScore = score;
     }
 
-    public Move(Card cardToMove, IStack provider, IStack receiver, int score)
+    public Move(Card? cardToMove, IStack provider, IStack receiver, int score)
     {
-        _cardsToMove = new List<Card>{cardToMove};
+        _cardsToMove = new List<Card?> {cardToMove};
         _provider = provider;
         _receiver = receiver;
         PossibleScore = score;
@@ -35,6 +35,20 @@ public class Move
 
     public bool TryMove()
     {
+        //if move empties stack increase score
+        if (_provider is CardStack cardStack)
+        {
+            int remainingCards = cardStack.GetCardCount() - _cardsToMove.Count;
+            if (remainingCards == 0)
+            {
+                PossibleScore += 5;
+            }
+
+            if (_cardsToMove.Count == cardStack.GetVisibleStackSize())
+            {
+                PossibleScore += 10;
+            }
+        }
         _movePossible = _cardsToMove.Count == 1 ? _receiver.TryMoveTo(_cardsToMove[0]) : _receiver.TryMoveStackTo(_cardsToMove);
 
         return _movePossible;
@@ -48,12 +62,12 @@ public class Move
         
             if (_cardsToMove.Count == 1)
             {
-                Card card = _provider.MoveTop();
+                Card? card = _provider.MoveTop();
                 _receiver.MoveTo(card);
             }
             else
             {
-                List<Card> cards = _provider.MoveStack(_cardsToMove.Count);
+                List<Card?> cards = _provider.MoveStack(_cardsToMove.Count);
                 _receiver.MoveStackTo(cards);
             }
         }
@@ -71,7 +85,7 @@ public class Move
     public override string ToString()
     {
         string listString = "[";
-        foreach (Card card in _cardsToMove)
+        foreach (Card? card in _cardsToMove)
         {
             listString += card + ",";
         }
@@ -81,6 +95,7 @@ public class Move
         return "Move: " + listString + " form " + _provider + " to " + _receiver;
     }
 
+    //not optimal...
 #pragma warning disable CS0659
     public override bool Equals(object? obj)
 
@@ -103,6 +118,9 @@ public class Move
         
         // ReSharper disable once BaseObjectEqualsIsObjectEquals
     }
+    
 #pragma warning restore CS0659
+
+    
 }
 
